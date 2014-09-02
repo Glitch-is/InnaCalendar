@@ -9,28 +9,31 @@
 # Report any bugs on GitHub <https://github.com/RuNnNy/InnaCalendar>
 ###
 
-
 from icalendar import Calendar, Event
 import json
 import datetime
 
 cal = Calendar() # Initiate a new Calander Object
-
 schedule = "" # Declare a string for the JSON
 
 with open("Schedule.json", 'r') as f: # Read the JSON data from a file
     for line in f: # Loop through lines, even there's only one..
         schedule += line
 js = json.loads(schedule) # Load the JSON Object
+fs = []
+for i in js: # Loop through each class individually
+    title = i["titleShort"] + " " + i["classroom"] + " " + i["teacher"]
+    start = datetime.datetime.strptime(i["start"], "%m/%d/%Y %H:%M:%S")
+    end = datetime.datetime.strptime(i["end"], "%m/%d/%Y %H:%M:%S")
+    if (title + start) not in fs:
+        fs.append(title + start)
+        event = Event() # Create a new Event Object for the class
+        event.add('summary', title) # Add the Summary or Name of the Event which is gonna look something like "MATH101 S 1 ABC" and is formated like "<CLASS> <ROOM> <TEACHER>"
+        event.add('dtstart', start) # Add the start of the Event
+        event.add('dtend', end) # Add the end of the Event
+        event.add('rrule', {'freq': 'weekly'}) # Make the Event repeat weekly so our calander doesn't get obsolete after a week
 
-for i in js: # Loop throught each class individually
-    event = Event() # Create a new Event Object for the class
-    event.add('summary', i["titleShort"] + " " + i["classroom"] + " " + i["teacher"]) # Add the Summary or Name of the Event which is gonna look something like "MATH101 S 1 ABC" and is formated like "<CLASS> <ROOM> <TEACHER>"
-    event.add('dtstart', datetime.datetime.strptime(i["start"], "%m/%d/%Y %H:%M:%S")) # Add the start of the Event
-    event.add('dtend', datetime.datetime.strptime(i["end"], "%m/%d/%Y %H:%M:%S")) # Add the end of the Event
-    event.add('rrule', {'freq': 'weekly'}) # Make the Event repeat weekly so our calander doesn't get obsolete after a week
-
-    cal.add_component(event) # Add the Event to our Calendar
+        cal.add_component(event) # Add the Event to our Calendar
 
 with open("Calendar.ics", "wb") as f: # Open the iCalendar File
     f.write(cal.to_ical()) # Write our Calendar Object to the iCalendar file so it can be imported into iCalendar compatible applications (Google Calendar and more...)
