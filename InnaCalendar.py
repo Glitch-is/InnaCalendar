@@ -1,7 +1,7 @@
 ###
 # Author: Glitch <Glitch@Glitch.is>
 # Name: InnaCalendar
-# Description: Uses extracted JSON data from Inna to create a iCalendar file that can be imported to iCalendar compatible application such as Google Calendar.
+# Description: Uses extracted JSON data from Inna to create an iCalendar file that can be imported to iCalendar compatible application such as Google Calendar.
 # Usage: Extract your schedule from Inna so you're left with the JSON data and place it into 'Schedule.json', make sure it's in the same directory you're
 #        running this script from. Run the script 'python3 InnaCalendar.py' which will leave you with an iCalendar file 'Calendar.ics', now you can import
 #        that into the application of your choice such as Google Calendar.
