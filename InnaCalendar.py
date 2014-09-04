@@ -25,8 +25,8 @@ for i in js: # Loop through each class individually
     title = i["titleShort"] + " " + i["classroom"] + " " + i["teacher"]
     start = datetime.datetime.strptime(i["start"], "%m/%d/%Y %H:%M:%S")
     end = datetime.datetime.strptime(i["end"], "%m/%d/%Y %H:%M:%S")
-    if (title + start) not in fs:
-        fs.append(title + start)
+    if (title + str(start)) not in fs:
+        fs.append(title + str(start))
         event = Event() # Create a new Event Object for the class
         event.add('summary', title) # Add the Summary or Name of the Event which is gonna look something like "MATH101 S 1 ABC" and is formated like "<CLASS> <ROOM> <TEACHER>"
         event.add('dtstart', start) # Add the start of the Event
