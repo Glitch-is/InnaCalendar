@@ -38,7 +38,7 @@ while True:
 cookie = {"JSESSIONID": login.cookies["JSESSIONID"]} # Get the Session from the response cookie to use for next step of the login
 
 oldInna = requests.get('https://www.inna.is/opna.jsp?adgangur=1', cookies=cookie) # Tell inna we want to use the new site so it will send us a token to skip the new inna authentication, how convienient?
-activate = oldInna.text.split("'")[1] # Parse the link to the new inna with out token
+activate = oldInna.text.split("'")[1] # Parse the link to the new inna with our token
 
 newInna = requests.get(activate) # Activate our new session
 newCookie = {"JSESSIONID": newInna.cookies["JSESSIONID"]} # Store our new session in a cookie
