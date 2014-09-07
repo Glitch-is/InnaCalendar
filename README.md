@@ -2,7 +2,7 @@ InnaCalendar
 ============
 
 ##Description
-This python script uses extracted JSON data from Inna to create an iCalendar file that can be imported to iCalendar compatible application such as Google Calendar.
+This python script extracts your calendar from Inna to create an iCalendar file that can be imported to iCalendar compatible application such as Google Calendar.
 
 ##Dependencies
 
@@ -16,13 +16,14 @@ sudo pip install icalendar
 ```
 
 ##Usage
-Extract your schedule from Inna so you're left with the JSON data and place it into 'Schedule.json', make sure it's in the same directory you're running the script from.
 ###Run the Script
 ```
 python3 InnaCalendar.py
 ```
+Enter your Username and Password for Inna.
+
 ###Output
-You will be left with an iCalendar file 'Calendar.ics'
+You will be left with an iCalendar file 'Calendar.ics' in the directory you ran the script
 
 ###Import
 Now that you have your iCalendar file you can import into any iCalendar compatible application such as Google Calendar.
