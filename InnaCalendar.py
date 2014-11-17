@@ -5,7 +5,7 @@
 # Usage: Run the script with the following command 'python3 InnaCalendar.py'. Enter your username and password and let the script do it's work, it will leave 
 # you with an iCalendar file 'Calendar.ics', now you can import that into the application of your choice such as Google Calendar.
 #
-# Report any bugs on GitHub <https://github.com/RuNnNy/InnaCalendar>
+# Report any bugs on GitHub <https://github.com/Glitch-is/InnaCalendar>
 ###
 
 import os
