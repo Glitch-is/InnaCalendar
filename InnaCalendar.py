@@ -2,7 +2,7 @@
 # Author: Glitch <Glitch@Glitch.is>
 # Name: InnaCalendar
 # Description: Uses extracted JSON data from Inna to create an iCalendar file that can be imported to iCalendar compatible application such as Google Calendar.
-# Usage: Run the script with the following command 'python3 InnaCalendar.py'. Enter your username and password and let the script do it's work, it will leave 
+# Usage: Run the script with the following command 'python3 InnaCalendar.py'. Enter your username and password and let the script do it's work, it will leave
 # you with an iCalendar file 'Calendar.ics', now you can import that into the application of your choice such as Google Calendar.
 #
 # Report any bugs on GitHub <https://github.com/RuNnNy/InnaCalendar>
@@ -37,7 +37,7 @@ while True:
 
 cookie = {"JSESSIONID": login.cookies["JSESSIONID"]} # Get the Session from the response cookie to use for next step of the login
 
-oldInna = requests.get('https://www.inna.is/opna.jsp?adgangur=1', cookies=cookie) # Tell inna we want to use the new site so it will send us a token to skip the new inna authentication, how convienient?
+oldInna = requests.get('https://www.inna.is/opna.jsp?adgangur=0', cookies=cookie) # Tell inna we want to use the new site so it will send us a token to skip the new inna authentication, how convienient?
 activate = oldInna.text.split("'")[1] # Parse the link to the new inna with our token
 
 newInna = requests.get(activate) # Activate our new session
@@ -46,11 +46,13 @@ newCookie = {"JSESSIONID": newInna.cookies["JSESSIONID"]} # Store our new sessio
 studentInfo = requests.get('https://nam.inna.is/inna11/api/UserData/GetLoggedInUser', cookies=newCookie) # Get the student info
 studentId = studentInfo.json()['studentId'] # Parse the studentId from the studentInfo
 
+now =datetime.datetime.now()
+later = now + datetime.timedelta(days=7)
 schedulePayload = {
     'staff_id':'',
     'student_id':str(studentId),
-    'date_from':'01.09.2014',
-    'date_to':'07.09.2014',
+    'date_from': '%s.%s.%s' % (str(now.day).zfill(2), str(now.month).zfill(2), str(now.year).zfill(2)),
+    'date_to': '%s.%s.%s' % (str(later.day).zfill(2), str(later.month).zfill(2), str(later.year).zfill(2)),
     'attendanceOverview':'0'
 } # Initialize the Schedule payload
 
