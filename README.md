@@ -14,6 +14,10 @@ You need the iCalendar Python module which can be installed with the following c
 ```
 sudo pip install icalendar
 ```
+####Requests
+```
+sudo pip install requests
+```
 
 ##Usage
 ###Run the Script
