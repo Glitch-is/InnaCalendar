@@ -47,7 +47,7 @@ studentInfo = requests.get('https://nam.inna.is/inna11/api/UserData/GetLoggedInU
 studentId = studentInfo.json()['studentId'] # Parse the studentId from the studentInfo
 
 now =datetime.datetime.now()
-later = now + datetime.timedelta(days=7)
+later = now + datetime.timedelta(days=6)
 schedulePayload = {
     'staff_id':'',
     'student_id':str(studentId),
