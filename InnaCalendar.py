@@ -9,6 +9,7 @@
 ###
 
 import os
+import json
 import datetime
 import requests
 from getpass import getpass
@@ -40,10 +41,13 @@ cookie = {"JSESSIONID": login.cookies["JSESSIONID"]} # Get the Session from the 
 oldInna = requests.get('https://www.inna.is/opna.jsp?adgangur=0', cookies=cookie) # Tell inna we want to use the new site so it will send us a token to skip the new inna authentication, how convienient?
 activate = oldInna.text.split("'")[1] # Parse the link to the new inna with our token
 
-newInna = requests.get(activate) # Activate our new session
-newCookie = {"JSESSIONID": newInna.cookies["JSESSIONID"]} # Store our new session in a cookie
+# using a session here because normal get request wasn't working
+session = requests.Session()
+response = session.get(activate)
 
-studentInfo = requests.get('https://nam.inna.is/inna11/api/UserData/GetLoggedInUser', cookies=newCookie) # Get the student info
+newCookie = {"JSESSIONID": session.cookies.get_dict()["JSESSIONID"]} # Store our new session in a cookie
+
+studentInfo = requests.get('https://nam.inna.is/api/UserData/GetLoggedInUser', cookies=newCookie) # Get the student info
 studentId = studentInfo.json()['studentId'] # Parse the studentId from the studentInfo
 
 now =datetime.datetime.now()
@@ -58,15 +62,22 @@ schedulePayload = {
 
 print("Fetching Schedule...")
 
-schedule = requests.get("https://nam.inna.is/inna11/api/Timetable/GetTimetable", params=schedulePayload, cookies=newCookie) # Get the user schedule with our payload
+schedule = requests.get("https://nam.inna.is/api/Timetable/GetTimetable", params=schedulePayload, cookies=newCookie) # Get the user schedule with our payload
 js = schedule.json() # Store our JSON Object
+
+print("Saving JSON...")
+with open('schedule.json', 'w') as f:
+  json.dump(js, f, ensure_ascii=False)
 
 print("Starting to build Schedule...")
 
 cal = Calendar() # Initiate a new Calander Object
 
 for i in js: # Loop through each class individually
-    title = i["titleShort"] + " " + i["classroom"] + " " + i["teacher"] # Title of the event
+    # putting teacher in a variable to catch exceptions. Sometimes no teacher is registered and we get keyerror
+    teacher = " " + i["teacher"] if 'teacher' in i else ""
+
+    title = i["titleShort"] + " " + i["classroom"] + teacher # Title of the event
     print("Adding Event: " + title)
     start = datetime.datetime.strptime(i["start"], "%m/%d/%Y %H:%M:%S") # Time when the event starts
     end = datetime.datetime.strptime(i["end"], "%m/%d/%Y %H:%M:%S") # Time when event ends
