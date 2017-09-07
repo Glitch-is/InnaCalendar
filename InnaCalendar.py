@@ -65,7 +65,7 @@ print("Fetching Schedule...")
 schedule = requests.get("https://nam.inna.is/api/Timetable/GetTimetable", params=schedulePayload, cookies=newCookie) # Get the user schedule with our payload
 js = schedule.json() # Store our JSON Object
 
-print("Saving JSON for debugging...")
+print("Saving JSON...")
 with open('schedule.json', 'w') as f:
   json.dump(js, f, ensure_ascii=False)
 
@@ -75,11 +75,7 @@ cal = Calendar() # Initiate a new Calander Object
 
 for i in js: # Loop through each class individually
     # putting teacher in a variable to catch exceptions. Sometimes no teacher is registered and we get keyerror
-    teacher = ""
-    if 'teacher' in i:
-        teacher = " " + i["teacher"]
-    else:
-        teacher = ""
+    teacher = " " + i["teacher"] if 'teacher' in i else ""
 
     title = i["titleShort"] + " " + i["classroom"] + teacher # Title of the event
     print("Adding Event: " + title)
